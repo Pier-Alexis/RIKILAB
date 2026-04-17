@@ -10,7 +10,7 @@ app.use(cors());
 const FILE = "orders.json";
 const ADMIN_TOKEN = "rikilab";
 
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static("public"));
 
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "../public", "index.html"));
