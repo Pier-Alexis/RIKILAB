@@ -26,6 +26,62 @@ body {
     100% { background-position: 0% 50%; }
 }
 
+.topbar {
+        width: 100%;
+        height: 70px;
+        padding: 0 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+
+        backdrop-filter: blur(10px);
+        background: linear-gradient(120deg, rgba(255,255,255,0.95), rgba(240,255,240,0.85));
+        border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+
+.logo {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: black;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.logo img {
+    height: 45px;
+    width: 45px;
+    object-fit: contain;
+}
+
+.nav a {
+    margin-left: 25px;
+    text-decoration: none;
+    color: black;
+    font-weight: 500;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.nav a::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background: #0f9d58;
+    transition: width 0.3s ease;
+}
+
+.nav a:hover { color: #0f9d58; }
+.nav a:hover::after { width: 100%; }
+
 /* CONTAINER */
 .container {
     max-width: 1300px;
@@ -63,6 +119,7 @@ body {
     align-items: flex-end;
     padding: 30px;
     overflow: hidden;
+    pointer-events: none;
 }
 
 /* IMAGE */
@@ -90,7 +147,8 @@ body {
     position: absolute;
     right: 30px;
     bottom: 30px;
-    z-index: 2;
+    z-index: 5;
+    pointer-events: auto;
 
     padding: 12px 22px;
     border-radius: 25px;
@@ -169,6 +227,18 @@ body {
 </head>
 
 <body>
+
+<div class="topbar">
+    <div class="logo">
+        <img src="../static/RIKILAB.png">
+    </div>
+
+    <div class="nav">
+        <a href="../index.html">Accueil</a>
+        <a href="./ordinateurs.html">Ordinateurs</a>
+        <a href="./contact.html">Nous contacter</a>
+    </div>
+</div>
 
 <div class="container">
 
