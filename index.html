@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil - RikiLab</title>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+
+        body {
+            background: linear-gradient(-45deg, #000000, #0a1f0f, #0f3d1f, #000000);
+            background-size: 400% 400%;
+            animation: gradientBG 12s ease infinite;
+            color: white;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* NAVBAR */
+        .topbar {
+            width: 100%;
+            height: 70px;
+            padding: 0 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+
+            backdrop-filter: blur(10px);
+            background: linear-gradient(120deg, rgba(255,255,255,0.95), rgba(240,255,240,0.85));
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: black;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .logo img {
+            height: 45px;
+            width: 45px;
+            object-fit: contain;
+        }
+
+        .nav a {
+            margin-left: 25px;
+            text-decoration: none;
+            color: black;
+            font-weight: 500;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav a::after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: #0f9d58;
+            transition: width 0.3s ease;
+        }
+
+        .nav a:hover { color: #0f9d58; }
+        .nav a:hover::after { width: 100%; }
+
+        /* HERO */
+        .hero {
+            margin-top: 70px;
+            width: 100%;
+            height: 60vh;
+            background: white;
+            color: black;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        /* FADE IN */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-1 { animation: fadeInUp 1s ease forwards; }
+        .fade-2 { animation: fadeInUp 1s ease forwards; animation-delay: 0.3s; opacity: 0; }
+        .fade-3 { animation: fadeInUp 1s ease forwards; animation-delay: 0.6s; opacity: 0; }
+
+        .hero h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 1.2em;
+            color: #555;
+            margin-bottom: 25px;
+        }
+
+        .hero button {
+            padding: 12px 25px;
+            font-size: 1em;
+            border: none;
+            border-radius: 25px;
+            background: #0f9d58;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .hero button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .hero-image {
+            z-index: 1;
+            position: absolute;
+            bottom: 5%;
+            width: 100%;
+            height: 60%;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 75px;
+        }
+
+        .hero-image img {
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .hero-card {
+            position: relative;
+            height: 100%;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            transition: transform 0.3s ease;
+            pointer-events: auto;
+        }
+
+        .hero-card img {
+            max-height: 100%;
+            object-fit: contain;
+            transition: transform 0.4s ease, filter 0.4s ease;
+            filter: brightness(0.95) drop-shadow(0 20px 30px rgba(0,0,0,0.2));
+        }
+
+/* TEXTE CACHÉ */
+        .hero-label {
+            position: absolute;
+            bottom: 10%;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+
+        /* HOVER */
+        .hero-card:hover img {
+            transform: scale(1.05);
+            filter: brightness(1);
+        }
+
+        .hero-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .hero-card:hover .hero-label {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* SERVICES (cards) */
+        .container {
+            padding: 60px 40px;
+        }
+
+        .title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .services {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            width: 400px;
+            aspect-ratio: 2 / 3;
+            overflow: hidden;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 1s ease, filter 2s ease, opacity 2s ease;
+            
+            transform: scale(1.08);
+        }
+
+        .card:hover img {
+            transform: scale(1.08);
+        }
+
+        .card:hover {
+            transform: scale(1.08);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            z-index: 10;
+        }
+
+        .card-title {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: rgba(0,0,0,0.7);
+            text-align: center;
+            padding: 12px;
+            font-weight: bold;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            font-size: 1em;
+            border: none;
+            border-radius: 25px;
+            background: #0f9d58;
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+            z-index: 10;
+            pointer-events: auto;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+        }
+
+        .section-fade {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease forwards;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="topbar">
+        <div class="logo">
+            <img src="static/RIKILAB.png" alt="Logo">
+            RikiLab
+        </div>
+        <div class="nav">
+            <a href="#">Accueil</a>
+            <a href="templates/ordinateurs.html">Ordinateurs</a>
+            <a href="#">À propos</a>
+            <a href="#">Contact</a>
+        </div>
+    </div>
+
+    <!-- HERO PRINCIPAL -->
+    <section class="hero">
+        <h1 class="fade-1">Ordinateurs HP à prix imbattables</h1>
+        <p class="fade-2">Performance. Fiabilité. Prix accessibles.</p>
+
+        <a class="btn fade-3" href="templates/ordinateurs.html">
+            Voir les modèles
+        </a>
+
+        <div class="hero-image">
+
+            <div class="hero-card">
+                <img src="static/ELITEBOOK.png">
+                <div class="hero-label">HP EliteBook</div>
+            </div>
+
+            <div class="hero-card">
+                <img src="static/PRODESK.png">
+                <div class="hero-label">HP ProDesk</div>
+            </div>
+
+            <div class="hero-card">
+                <img src="static/LENOVO.png">
+                <div class="hero-label">Lenovo ThinkCentre</div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SERVICES -->
+    <div class="container">
+        <h1 class="title section-fade">Autres services</h1>
+
+        <div class="services">
+
+            <div class="card" onclick="goToPage('impr3d.html')">
+                <img src="static/IMPR3D.jpg" alt="Impression 3D">
+                <div class="card-title">Impression 3D</div>
+            </div>
+
+            <div class="card" onclick="goToPage('imprphoto.html')">
+                <img src="static/PHOTOS.jpg" alt="PHOTOS">
+                <div class="card-title">Impression Photo</div>
+            </div>
+
+            <div class="card" onclick="goToPage('cnc.html')">
+                <img src="static/CNC.jpg" alt="CNC">
+                <div class="card-title">Usinage CNC</div>
+            </div>
+
+            <div class="card" onclick="goToPage('service4.html')">
+                <img src="static/LSR.jpg" alt="lsr">
+                <div class="card-title">Gravure et découpe Laser</div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function goToPage(page) {
+            alert("Page en développement : " + page);
+        }
+    </script>
+
+</body>
+</html>
