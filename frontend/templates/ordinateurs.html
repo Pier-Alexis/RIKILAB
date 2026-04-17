@@ -228,6 +228,56 @@ function updatePrice(product) {
 
     product.querySelector(".price span").innerText = total;
 }
+
+async function buyProduct(btn) {
+    const product = btn.closest(".product");
+
+    const name = product.querySelector("h2").innerText;
+    const price = product.querySelector(".price span").innerText;
+
+    let cpu = "default";
+    let ram = "default";
+    let ssd = "default";
+
+    product.querySelectorAll(".option-group").forEach(group => {
+        const label = group.querySelector("p")?.innerText;
+
+        const active = group.querySelector(".active");
+        if (!active) return;
+
+        if (label === "CPU") cpu = active.innerText;
+        if (label === "RAM") ram = active.innerText;
+        if (label === "SSD") ssd = active.innerText;
+    });
+
+    const order = {
+        product: name,
+        cpu,
+        ram,
+        ssd,
+        price: Number(price)
+    };
+
+    try {
+        const res = await fetch("http://localhost:3000/order", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(order)
+        });
+
+        const data = await res.json();
+        console.log("ORDER SENT:", data);
+
+        // redirection simple
+        window.location.href = "confirmation.html";
+
+    } catch (err) {
+        console.error("ERROR:", err);
+        alert("Erreur lors de la commande");
+    }
+}
 </script>
 
 </head>
@@ -285,7 +335,7 @@ function updatePrice(product) {
             </div>
 
             <div class="price">Prix: <span>400</span>$</div>
-            <button class="buy">Acheter</button>
+            <button class="buy" onclick="buyProduct(this)">Acheter</button>
         </div>
 
         <!-- PRODESK -->
@@ -330,7 +380,7 @@ function updatePrice(product) {
             </div>
 
             <div class="price">Prix: <span>350</span>$</div>
-            <button class="buy">Acheter</button>
+            <button class="buy" onclick="buyProduct(this)">Acheter</button>
         </div>
 
         <!-- LENOVO -->
@@ -344,7 +394,7 @@ function updatePrice(product) {
             </p>
 
             <div class="price">Prix: <span>500</span>$</div>
-            <button class="buy">Acheter</button>
+            <button class="buy" onclick="buyProduct(this)">Acheter</button>
         </div>
 
     </div>

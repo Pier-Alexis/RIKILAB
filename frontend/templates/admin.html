@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Admin - RikiLab</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: linear-gradient(-45deg, #000, #0a1f0f, #0f3d1f, #000);
+    background-size: 400% 400%;
+    animation: bg 12s ease infinite;
+    color: white;
+}
+
+@keyframes bg {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* LOGIN */
+.login {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.box {
+    padding: 40px;
+    border-radius: 25px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+}
+
+input {
+    padding: 12px;
+    width: 250px;
+    border-radius: 15px;
+    border: none;
+    margin-bottom: 10px;
+}
+
+button {
+    padding: 12px 20px;
+    border-radius: 20px;
+    border: none;
+    background: #0f9d58;
+    color: white;
+    cursor: pointer;
+}
+
+/* PANEL */
+.panel {
+    padding: 100px 40px;
+}
+
+.order {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 20px;
+    border-radius: 20px;
+    margin-bottom: 15px;
+}
+
+.delete {
+    margin-top: 10px;
+    background: #ff3b3b;
+}
+</style>
+</head>
+
+<body>
+
+<div class="login" id="login">
+    <div class="box">
+        <h2>Admin Login</h2>
+        <input id="token" placeholder="Token admin">
+        <br>
+        <button onclick="login()">Entrer</button>
+    </div>
+</div>
+
+<div class="panel" id="panel" style="display:none;">
+    <h1>Commandes</h1>
+    <div id="orders"></div>
+</div>
+
+<script>
+let TOKEN = "";
+
+function login() {
+    TOKEN = document.getElementById("token").value;
+
+    document.getElementById("login").style.display = "none";
+    document.getElementById("panel").style.display = "block";
+
+    loadOrders();
+}
+
+async function loadOrders() {
+    try {
+        const res = await fetch("http://localhost:3000/orders", {
+            headers: {
+                "Authorization": TOKEN
+            }
+        });
+
+        const data = await res.json();
+
+        const div = document.getElementById("orders");
+        div.innerHTML = "";
+
+        console.log("API RESPONSE:", data);
+
+        if (!Array.isArray(data)) {
+            div.innerHTML = `
+                <div style="padding:20px; background:#300; border-radius:10px;">
+                    ❌ Erreur backend: ${data.error || "Réponse invalide"}
+                </div>
+            `;
+            return;
+        }
+
+        if (data.length === 0) {
+            div.innerHTML = `
+                <div style="padding:20px; background:#222; border-radius:10px;">
+                    Aucune commande
+                </div>
+            `;
+            return;
+        }
+
+        data.forEach(o => {
+            div.innerHTML += `
+                <div style="padding:15px; margin:10px; background:#222; border-radius:10px;">
+                    <b>${o.product}</b> - ${o.price}$<br>
+                    CPU: ${o.cpu || "-"} | RAM: ${o.ram || "-"} | SSD: ${o.ssd || "-"}
+                    <br>
+                    <button onclick="del(${o.id})">Supprimer</button>
+                </div>
+            `;
+        });
+
+    } catch (err) {
+        document.getElementById("orders").innerHTML = `
+            <div style="padding:20px; background:#500; border-radius:10px;">
+                ❌ Erreur JS: ${err.message}
+            </div>
+        `;
+    }
+}
+
+async function del(id) {
+    await fetch("http://localhost:3000/order/" + id, {
+        method: "DELETE",
+        headers: {
+            "Authorization": TOKEN
+        }
+    });
+
+    loadOrders();
+}
+
+console.log("DELETE ID:", id);
+</script>
+
+</body>
+</html>
