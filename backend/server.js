@@ -1,5 +1,6 @@
 const express = require("express");
 const fs = require("fs");
+const path = require("path");
 const cors = require("cors");
 
 const app = express();
@@ -8,6 +9,12 @@ app.use(cors());
 
 const FILE = "orders.json";
 const ADMIN_TOKEN = "rikilab";
+
+app.use(express.static(path.join(__dirname, "public")));
+
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "../public", "index.html"));
+});
 
 if (!fs.existsSync(FILE)) {
     fs.writeFileSync(FILE, "[]");
