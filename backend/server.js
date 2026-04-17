@@ -7,47 +7,45 @@ app.use(express.json());
 app.use(cors());
 
 const FILE = "orders.json";
-const ADMIN_TOKEN = "rikilab-admin-123"; // change ça plus tard
+const ADMIN_TOKEN = "rikilab";
 
 if (!fs.existsSync(FILE)) {
     fs.writeFileSync(FILE, "[]");
 }
 
 function readOrders() {
-    return JSON.parse(fs.readFileSync(FILE));
+    try {
+        return JSON.parse(fs.readFileSync(FILE));
+    } catch {
+        return [];
+    }
 }
 
 function saveOrders(data) {
     fs.writeFileSync(FILE, JSON.stringify(data, null, 2));
 }
 
-// TEST
+/* TEST */
 app.get("/", (req, res) => {
     res.send("Backend OK");
 });
 
-// CREATE ORDER
+/* CREATE ORDER */
 app.post("/order", (req, res) => {
     const order = req.body;
 
-    if (!order || typeof order !== "object" || !order.product) {
+    if (!order || !order.product) {
         return res.status(400).json({ error: "Invalid order" });
     }
 
     const data = readOrders();
-
-    const newOrder = {
-        id: Date.now(),
-        ...order
-    };
-
-    data.push(newOrder);
+    data.push(order);
     saveOrders(data);
 
-    res.json({ success: true, order: newOrder });
+    res.json({ success: true });
 });
 
-// GET ORDERS (admin only)
+/* GET ORDERS (ADMIN ONLY) */
 app.get("/orders", (req, res) => {
     const token = req.headers.authorization;
 
@@ -55,14 +53,10 @@ app.get("/orders", (req, res) => {
         return res.status(403).json({ error: "Forbidden" });
     }
 
-    const data = readOrders();
-
-    const cleaned = data.filter(o => o && o.product);
-
-    res.json(cleaned);
+    res.json(readOrders());
 });
 
-// DELETE ORDER (admin only)
+/* DELETE ORDER */
 app.delete("/order/:id", (req, res) => {
     const token = req.headers.authorization;
 
@@ -71,10 +65,13 @@ app.delete("/order/:id", (req, res) => {
     }
 
     const id = parseInt(req.params.id);
-    let data = readOrders();
+    const data = readOrders();
 
-    data = data.filter(o => o.id !== id);
+    if (id < 0 || id >= data.length) {
+        return res.status(404).json({ error: "Not found" });
+    }
 
+    data.splice(id, 1);
     saveOrders(data);
 
     res.json({ success: true });
@@ -82,32 +79,4 @@ app.delete("/order/:id", (req, res) => {
 
 app.listen(3000, () => {
     console.log("Server running on http://localhost:3000");
-});
-
-app.get("/orders", (req, res) => {
-    console.log("TOKEN RECEIVED:", req.headers.authorization);
-
-    const token = req.headers.authorization;
-
-    if (token !== ADMIN_TOKEN) {
-        return res.status(403).json({ error: "Forbidden" });
-    }
-
-    const data = readOrders();
-    console.log("ORDERS:", data);
-
-    res.json(data);
-});
-
-data.forEach(o => {
-    if (!o || !o.product) return;
-
-    div.innerHTML += `
-        <div class="order">
-            <b>${o.product}</b> - ${o.price}$<br>
-            CPU: ${o.cpu || "-"} | RAM: ${o.ram || "-"} | SSD: ${o.ssd || "-"}
-            <br>
-            <button onclick="del(${o.id})">Supprimer</button>
-        </div>
-    `;
 });
