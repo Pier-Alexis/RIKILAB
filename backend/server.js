@@ -10,7 +10,7 @@ app.use(cors());
 const FILE = "orders.json";
 const ADMIN_TOKEN = "rikilab";
 
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "../public")));
 
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "../public", "index.html"));
@@ -32,12 +32,7 @@ function saveOrders(data) {
     fs.writeFileSync(FILE, JSON.stringify(data, null, 2));
 }
 
-/* TEST */
-app.get("/", (req, res) => {
-    res.send("Backend OK");
-});
 
-/* CREATE ORDER */
 app.post("/order", (req, res) => {
     const order = req.body;
 
@@ -52,7 +47,6 @@ app.post("/order", (req, res) => {
     res.json({ success: true });
 });
 
-/* GET ORDERS (ADMIN ONLY) */
 app.get("/orders", (req, res) => {
     const token = req.headers.authorization;
 
@@ -63,7 +57,6 @@ app.get("/orders", (req, res) => {
     res.json(readOrders());
 });
 
-/* DELETE ORDER */
 app.delete("/order/:id", (req, res) => {
     const token = req.headers.authorization;
 
