@@ -125,6 +125,13 @@ body {
     margin-bottom: 15px;
 }
 
+.product-desc {
+    font-size: 0.9em;
+    color: #bbb;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    min-height: 50px; /* garde les cartes alignées */
+}
 
 .option-group {
     margin-top: 15px;
@@ -243,6 +250,10 @@ function updatePrice(product) {
             <img src="../static/ELITEBOOK.png">
             <h2>HP EliteBook 840 G6</h2>
 
+            <p class="product-desc">
+                Ordinateur portable conçu pour des professionnels avec une excellente batterie pour une meilleure utilisation.
+            </p>
+
             <div class="option-group">
                 <p>CPU</p>
                 <div class="choices">
@@ -275,6 +286,10 @@ function updatePrice(product) {
         <div class="product" data-base="350">
             <img src="../static/PRODESK.png">
             <h2>HP ProDesk 400 G6</h2>
+
+            <p class="product-desc">
+                Ordinateur de bureau type compact, qui se fait discret, avec beaucoup de connectivité. Idéal pour les applications bureautiques plus lourdes.
+            </p>
 
             <div class="option-group">
                 <p>CPU</p>
@@ -316,6 +331,11 @@ function updatePrice(product) {
         <div class="product" data-base="500">
             <img src="../static/LENOVO.png">
             <h2>Lenovo T15</h2>
+
+            <h2>Pas d'options disponibles</h2>
+            <p class="product-desc">
+                Un ordinateur portable plus gros, plus léger, et plus productif. Un ordinateur de bureau, accessible partout où vous êtes.
+            </p>
 
             <div class="price">Prix: <span>500</span>$</div>
             <button class="buy">Acheter</button>
